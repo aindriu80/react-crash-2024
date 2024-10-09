@@ -1,19 +1,18 @@
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero.tsx";
-import HomeCards from "./components/HomeCards.tsx";
-import JobListings from "./components/JobListings.tsx";
-import ViewAllJobs from "./components/ViewAllJobs.tsx";
+import { Route, createBrowserRouter, RouterProvider, createRoutesFromElements } from 'react-router-dom';
+import HomePage from './pages/HomePage.tsx'
+import MainLayout from './layouts/MainLayout.tsx';
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<MainLayout />}>
+      <Route index element={<HomePage />} />
+    </Route>
+  )
+);
+
 
 const App = () => {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <HomeCards />
-      <JobListings />
-      <ViewAllJobs />
-    </>
-  );
+  return <RouterProvider router={router} />
 };
 
 export default App;
