@@ -1,10 +1,38 @@
-import { useParams, useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaMapMarker } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const JobPage = () => {
-  const { id } = useParams();
-  const job = useLoaderData();
+interface Job {
+  id: number;
+  type: string;
+  title: string;
+  description: string;
+  salary: string;
+  location: string;
+  company: {
+    name: string;
+    description: string;
+    contactEmail: string;
+    contactPhone: string;
+  };
+}
+
+interface JobPageProps {
+  job: Job;
+  deleteJob: (jobId: number) => void;
+}
+
+const JobPage = ({ deleteJob }: JobPageProps) => {
+  const navigate = useNavigate();
+  const job = useLoaderData() as Job;
+
+  const onDeleteClick = (jobId: number) => {
+    const confirm = window.confirm('Are you sure you want to delete this listing?')
+    if (!confirm) return;
+    deleteJob(jobId);
+    navigate('/jobs')
+
+  }
 
   return <>
     <section>
@@ -88,7 +116,7 @@ const JobPage = () => {
                 className="bg-indigo-500 hover:bg-indigo-600 text-white text-center font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
               >Edit Job</Link
               >
-              <button
+              <button onClick={() => onDeleteClick(job.id)}
                 className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
               >
                 Delete Job
@@ -103,11 +131,10 @@ const JobPage = () => {
 
 }
 
-const jobLoader = async ({ params }) => {
+const jobLoader = async ({ params }: { params: { id: number } }) => {
   const res = await fetch(`/api/jobs/${params.id}`);
-  const data = await res.json();
+  const data: Job = await res.json();
   return data;
-
 }
 
 export { JobPage as default, jobLoader }
