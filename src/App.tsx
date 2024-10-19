@@ -25,6 +25,7 @@ interface NewJob {
   job: Job;
 }
 
+
 const App = () => {
 
   // Add New job
@@ -43,7 +44,10 @@ const App = () => {
 
   // Delete Job 
   const deleteJob = async (id: number) => {
-    console.log('delete', id)
+    const res = await fetch(`/api/jobs/${id}`, {
+      method: 'DELETE',
+    });
+    return;
   }
 
   const router = createBrowserRouter(
