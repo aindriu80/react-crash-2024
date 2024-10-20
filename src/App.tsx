@@ -27,9 +27,7 @@ interface NewJob {
 
 
 const App = () => {
-
   // Add New job
-
   const addJob = async (newJob: NewJob) => {
     const res = await fetch('/api/jobs', {
       method: 'POST',
@@ -38,7 +36,6 @@ const App = () => {
       },
       body: JSON.stringify(newJob)
     });
-    console.log(res)
     return;
   }
 
@@ -48,16 +45,14 @@ const App = () => {
       method: 'DELETE',
     });
     return;
-  }
+  };
 
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<MainLayout />}>
         <Route index element={<HomePage />} />
-        <Route path='/jobs' element={<JobsPage />} />
-        <Route path='/jobs/:id' element={<JobPage />} loader={jobLoader} />
+        <Route path='/jobs/:id' element={<JobPage deleteJob={deleteJob} />} loader={jobLoader} />  <Route path='/jobs' element={<JobsPage />} />
         <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
-        <Route path='/jobs/:id' element={<JobPage deleteJob={deleteJob} />} />
         <Route path='*' element={<NotFoundPage />} />
       </Route>
     )
